@@ -72,6 +72,11 @@
             duration  = 1.0;
             radius    = 30;
             break;
+        case ICDMaterialActivityIndicatorViewStyleExtraLarge:
+            lineWidth = 4.5;
+            duration  = 1.5;
+            radius    = 45;
+            break;
     }
     
     if (CGRectEqualToRect(frame, CGRectZero)) {

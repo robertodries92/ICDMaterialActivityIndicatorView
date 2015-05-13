@@ -11,7 +11,8 @@
 typedef enum: NSInteger{
     ICDMaterialActivityIndicatorViewStyleSmall,
     ICDMaterialActivityIndicatorViewStyleMedium,
-    ICDMaterialActivityIndicatorViewStyleLarge
+    ICDMaterialActivityIndicatorViewStyleLarge,
+    ICDMaterialActivityIndicatorViewStyleExtraLarge,
 }ICDMaterialActivityIndicatorViewStyle;
 
 @interface ICDMaterialActivityIndicatorView : UIView
