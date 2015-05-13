@@ -9,23 +9,24 @@
 #import "ICDMaterialActivityIndicatorView.h"
 
 @interface ICDMaterialActivityIndicatorLayer : CAShapeLayer
+
 @property (nonatomic) CGFloat radius;
 
 @end
 
 @implementation ICDMaterialActivityIndicatorLayer
 
-- (instancetype)init{
+- (instancetype)init {
     self = [super init];
     if (self){
         self.fillColor = [[UIColor clearColor] CGColor];
-        self.lineCap = kCALineJoinRound;
+        self.lineCap   = kCALineJoinRound;
     }
     return self;
 }
 
 - (void)setRadius:(CGFloat)radius{
-    _radius = radius;
+    _radius   = radius;
     self.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0 * self.radius, 2.0 * self.radius) cornerRadius:self.radius].CGPath;
 }
 
@@ -38,59 +39,69 @@
 
 @implementation ICDMaterialActivityIndicatorView
 
-- (instancetype)init{
+- (instancetype)init {
     return [self initWithActivityIndicatorStyle:ICDMaterialActivityIndicatorViewStyleSmall];
 }
 
-- (instancetype)initWithActivityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style{
+- (instancetype)initWithActivityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style {
     return [self initWithFrame:CGRectZero activityIndicatorStyle:style];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     return [self initWithFrame:frame activityIndicatorStyle:ICDMaterialActivityIndicatorViewStyleSmall];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame activityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style{
+- (instancetype)initWithFrame:(CGRect)frame activityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style {
     CGFloat lineWidth;
     CGFloat duration;
-    CGFloat radius;
+    CGFloat radius = 0.0;
+    
     switch (style) {
         case ICDMaterialActivityIndicatorViewStyleSmall:
             lineWidth = 1.0;
-            duration = 0.8;
-            radius = 10;
+            duration  = 0.8;
+            radius    = 10;
             break;
         case ICDMaterialActivityIndicatorViewStyleMedium:
             lineWidth = 2.0;
-            duration = 0.8;
-            radius = 15;
+            duration  = 0.8;
+            radius    = 15;
             break;
         case ICDMaterialActivityIndicatorViewStyleLarge:
             lineWidth = 3.0;
-            duration = 1.0;
-            radius = 30;
+            duration  = 1.0;
+            radius    = 30;
             break;
     }
-    if (CGRectEqualToRect(frame, CGRectZero)){
+    
+    if (CGRectEqualToRect(frame, CGRectZero)) {
         frame = CGRectMake(0, 0, radius * 2, radius * 2);
     }
+    return [self initWithFrame:frame lineWidth:lineWidth duration:duration radius:radius];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth duration:(CGFloat)duration radius:(CGFloat)radius
+{
     self = [super initWithFrame:frame];
-    if (self){
-        _hidesWhenStopped = YES;
-        _animating = NO;
-        self.duration = duration;
-        self.color = [UIColor colorWithRed:39/255. green:140/255. blue:227/255. alpha:1.0];
-        self.lineWidth = lineWidth;
-        self.hidden = YES;
-        [self.layer addSublayer:self.indicatorLayer];
+    if (self) {
+        _animating                 = NO;
+        _hidesWhenStopped          = YES;
+        self.hidden                = YES;
+        self.duration              = duration;
+        self.lineWidth             = lineWidth;
         self.indicatorLayer.radius = radius;
+        self.color                 = [UIColor blackColor];
+        [self.layer addSublayer:self.indicatorLayer];
     }
     return self;
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.indicatorLayer.frame = CGRectMake((self.bounds.size.width - 2.0 * self.indicatorLayer.radius) / 2.0 , (self.bounds.size.height - 2.0 * self.indicatorLayer.radius) / 2.0, 2.0 * self.indicatorLayer.radius, 2.0 * self.indicatorLayer.radius);
+    self.indicatorLayer.frame = CGRectMake((CGRectGetWidth(self.bounds) - 2.0 * self.indicatorLayer.radius) / 2.0 ,
+                                           (CGRectGetHeight(self.bounds) - 2.0 * self.indicatorLayer.radius) / 2.0,
+                                           2.0 * self.indicatorLayer.radius,
+                                           2.0 * self.indicatorLayer.radius);
 }
 
 - (ICDMaterialActivityIndicatorLayer *)indicatorLayer{
@@ -124,34 +135,34 @@
 }
 
 - (CAAnimationGroup *)createNewStrokeAnimation{
-    CAKeyframeAnimation *inAnimation = [CAKeyframeAnimation animationWithKeyPath:@"strokeEnd"];
-    inAnimation.duration = self.duration;
-    inAnimation.values = @[@(0), @(1)];
-    
+    CAKeyframeAnimation *inAnimation  = [CAKeyframeAnimation animationWithKeyPath:@"strokeEnd"];
+    inAnimation.duration              = self.duration;
+    inAnimation.values                = @[@(0), @(1)];
+
     CAKeyframeAnimation *outAnimation = [CAKeyframeAnimation animationWithKeyPath:@"strokeStart"];
-    outAnimation.duration = self.duration;
-    outAnimation.values = @[@(0), @(0.8), @(1)];
-    outAnimation.beginTime = self.duration / 1.5;
-    
+    outAnimation.duration             = self.duration;
+    outAnimation.values               = @[@(0), @(0.8), @(1)];
+    outAnimation.beginTime            = self.duration / 1.5;
+
     CAAnimationGroup *strokeAnimation = [CAAnimationGroup animation];
-    strokeAnimation.animations = @[inAnimation, outAnimation];
-    strokeAnimation.duration = self.duration + outAnimation.beginTime;
-    strokeAnimation.repeatCount = INFINITY;
-    strokeAnimation.timeOffset = self.progress;
+    strokeAnimation.animations        = @[inAnimation, outAnimation];
+    strokeAnimation.duration          = self.duration + outAnimation.beginTime;
+    strokeAnimation.repeatCount       = INFINITY;
+    strokeAnimation.timeOffset        = self.progress;
     return strokeAnimation;
 }
 
-- (CABasicAnimation *)createNewRotateAnimation{
+- (CABasicAnimation *)createNewRotateAnimation {
     CABasicAnimation *rotateAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotateAnimation.fromValue = @(0);
-    rotateAnimation.toValue = @(M_PI * 2);
-    rotateAnimation.duration = self.duration * 1.5;
+    rotateAnimation.fromValue   = @(0);
+    rotateAnimation.toValue     = @(M_PI * 2);
+    rotateAnimation.duration    = self.duration * 1.5;
     rotateAnimation.repeatCount = INFINITY;
-    rotateAnimation.timeOffset = self.progress;
+    rotateAnimation.timeOffset  = self.progress;
     return rotateAnimation;
 }
 
-- (void)setProgress:(CGFloat)progress{
+- (void)setProgress:(CGFloat)progress {
     _progress = progress;
     if (!self.isAnimating){
         [self.indicatorLayer removeAllAnimations];
@@ -166,22 +177,22 @@
     }
 }
 
--(void)pauseLayer:(CALayer*)layer{
+-(void)pauseLayer:(CALayer*)layer {
     CFTimeInterval pausedTime = [layer convertTime:CACurrentMediaTime() fromLayer:nil];
-    layer.speed = 0.0;
-    layer.timeOffset = pausedTime;
+    layer.speed               = 0.0;
+    layer.timeOffset          = pausedTime;
 }
 
--(void)resumeLayer:(CALayer*)layer{
+-(void)resumeLayer:(CALayer*)layer {
     CFTimeInterval pausedTime = [layer timeOffset];
-    layer.speed = 1.0;
-    layer.timeOffset = 0.0;
-    layer.beginTime = 0.0;
+    layer.speed                   = 1.0;
+    layer.timeOffset              = 0.0;
+    layer.beginTime               = 0.0;
     CFTimeInterval timeSincePause = [layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
-    layer.beginTime = timeSincePause;
+    layer.beginTime               = timeSincePause;
 }
 
-- (void)startAnimating{
+- (void)startAnimating {
     if (self.isAnimating) {
         return;
     }
@@ -191,14 +202,14 @@
     self.indicatorLayer.speed = 1;
 }
 
-- (void)stopAnimating{
-    if (!self.isAnimating){
+- (void)stopAnimating {
+    if (!self.isAnimating) {
         return;
     }
     [UIView animateWithDuration:0.5 animations:^{
         self.alpha = 0.0;
     } completion:^(BOOL finished) {
-        self.alpha = 1.0;
+        self.alpha  = 1.0;
         self.hidden = self.hidesWhenStopped;
         [self.indicatorLayer removeAllAnimations];
         self.animating = NO;

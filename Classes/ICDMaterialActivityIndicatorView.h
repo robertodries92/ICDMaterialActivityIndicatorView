@@ -18,9 +18,13 @@ typedef enum: NSInteger{
 
 - (instancetype)initWithActivityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style;
 - (instancetype)initWithFrame:(CGRect)frame activityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style;
+
+- (instancetype)initWithFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth duration:(CGFloat)duration radius:(CGFloat)radius;
 // default is ICDMaterialActivityIndicatorViewStyleSmall
+
 @property(nonatomic) ICDMaterialActivityIndicatorViewStyle activityIndicatorViewStyle;
 // default is YES
+
 @property(nonatomic) BOOL hidesWhenStopped;
 @property(nonatomic, readonly, getter=isAnimating) BOOL animating;
 
