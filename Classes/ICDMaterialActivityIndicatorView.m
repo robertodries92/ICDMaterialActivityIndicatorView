@@ -60,7 +60,7 @@
 
     lineWidth = MAX(1.0, lineWidth);
     duration  = MAX(1.0, duration);
-    radius    = MAX(5.0,(int)(radius - lineWidth));
+    radius    = MAX(5.0, (int)radius);
     
     NSLog(@"[ICDMaterialActivityIndicatorView] radius (%.2f) - lineWidth (%.2f) - duration (%.2f)",radius,lineWidth,duration);
     
