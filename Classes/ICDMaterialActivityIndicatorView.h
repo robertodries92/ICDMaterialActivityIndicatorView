@@ -19,8 +19,7 @@ typedef enum: NSInteger{
 
 - (instancetype)initWithActivityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style;
 - (instancetype)initWithFrame:(CGRect)frame activityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style;
-
-- (instancetype)initWithFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth duration:(CGFloat)duration radius:(CGFloat)radius;
+- (instancetype)initWithRadiusFrame:(CGRect)frame;
 // default is ICDMaterialActivityIndicatorViewStyleSmall
 
 @property(nonatomic) ICDMaterialActivityIndicatorViewStyle activityIndicatorViewStyle;

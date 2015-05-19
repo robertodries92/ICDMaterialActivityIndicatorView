@@ -51,6 +51,22 @@
     return [self initWithFrame:frame activityIndicatorStyle:ICDMaterialActivityIndicatorViewStyleSmall];
 }
 
+- (instancetype)initWithRadiusFrame:(CGRect)frame
+{
+    CGFloat radius     = (MIN(CGRectGetWidth(frame), CGRectGetHeight(frame))/2);
+    CGFloat multiplier = ceilf(radius/35);
+    CGFloat lineWidth  = (radius/10.0)/2;
+    CGFloat duration   = (radius/15.0)/multiplier;
+
+    lineWidth = MAX(1.0, lineWidth);
+    duration  = MAX(1.0, duration);
+    radius    = (int)(radius - lineWidth);
+    
+    NSLog(@"[ICDMaterialActivityIndicatorView] radius (%.2f) - lineWidth (%.2f) - duration (%.2f)",radius,lineWidth,duration);
+    
+    return [self initWithFrame:frame lineWidth:lineWidth duration:duration radius:radius];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame activityIndicatorStyle:(ICDMaterialActivityIndicatorViewStyle)style {
     CGFloat lineWidth;
     CGFloat duration;
